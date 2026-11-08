@@ -38,5 +38,20 @@ test('Invalid login shows error', async ({page})=>{
 
     await expect(page.locator('[data-test="error"]')).toContainText('do not match')
 
-})
+});
+
+test('Verify the functionality that item added to the cart successfully', async ({page})=>{
+    await page.goto('https://www.saucedemo.com/');
+    await page.getByPlaceholder('Username').fill('standard_user');
+    await page.getByPlaceholder('Password').fill('secret_sauce');
+    await page.getByRole('button', {name: 'Login'}).click();
+
+    await page.locator('[data-test="add-to-cart-sauce-labs-bike-light"]').click();
+    await page.locator('[data-test="shopping-cart-link"]').click();
+
+    await expect(page.getByText('Your Cart')).toBeVisible();
+    await expect(page).toHaveURL(/cart/);
+
+    await expect(page.getByText('Sauce Labs Bike Light')).toBeVisible();
+});
 
